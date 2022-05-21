@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Generate') {
+            steps {
+                checkout scm
+            } 
+        }    
+        stage('Build backend') {
+            steps {
+                echo 'Build backend'
+                sh "chmod +x gradlew"
+                sh "./gradlew build --stacktrace" //run a gradle task
+                step( [ $class: 'JacocoPublisher' ] )
+                    }
+            }      
+        stage('Unit and integration test') {
+            steps {
+                echo 'Testing..'
+                //junit '**/test-results/test/*.xml'
+                junit(
+                    allowEmptyResults: true,
+                    testResults: '**/test-reports/*.xml'
+                ) 
+            }
+        }
+        stage('Build frontend') {
+            steps { 
+                echo 'Build frontend'
+                nodejs('NodeJS 14.6.0') {
+                    sh 'npm install --prefix frontend'
+                    sh 'npm run build --prefix frontend'
+                }
+            }
+        }
+    }
+}
