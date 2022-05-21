@@ -2,30 +2,30 @@ pipeline {
     agent any
 
     stages {
-        stage('Generate') {
-            steps {
-                checkout scm
-            } 
-        }    
-        stage('Build backend') {
-            steps {
-                echo 'Build backend'
-                sh "chmod +x gradlew"
-                sh "./gradlew build --stacktrace" //run a gradle task
-                step( [ $class: 'JacocoPublisher' ] )
-                    }
-            }      
-        stage('Unit and integration test') {
-            steps {
-                echo 'Testing..'
-                //junit '**/test-results/test/*.xml'
-                //testResults: '**/test-reports/*.xml'
-                junit(
-                    allowEmptyResults: true,
-                    testResults: '**/test-results/test/*.xml'
-                ) 
-            }
-        }
+        // stage('Generate') {
+        //     steps {
+        //         checkout scm
+        //     } 
+        // }    
+        // stage('Build backend') {
+        //     steps {
+        //         echo 'Build backend'
+        //         sh "chmod +x gradlew"
+        //         sh "./gradlew build --stacktrace" //run a gradle task
+        //         step( [ $class: 'JacocoPublisher' ] )
+        //             }
+        //     }      
+        // stage('Unit and integration test') {
+        //     steps {
+        //         echo 'Testing..'
+        //         //junit '**/test-results/test/*.xml'
+        //         //testResults: '**/test-reports/*.xml'
+        //         junit(
+        //             allowEmptyResults: true,
+        //             testResults: '**/test-results/test/*.xml'
+        //         ) 
+        //     }
+        // }
         stage('Build frontend') {
             steps { 
                 echo 'Build frontend'
