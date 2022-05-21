@@ -32,7 +32,7 @@ pipeline {
                 //nodejs('NodeJS 14.6.0') {
                     sh 'npm install --prefix frontend'
                     sh 'npm run build --prefix frontend'
-                }
+                //}
             }
         }
     }
